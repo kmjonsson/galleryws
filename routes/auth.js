@@ -2,9 +2,9 @@ const Users = require('../models/users.js');
 const Session = require('../models/sessions.js');
 
 module.exports = (server,module) => {
+  // Adds the session object to req object
   server.use((req, res, next) => {
     if(req.cookies['session'] !== undefined) {
-      console.log(req.cookies['session']);
       Session.run().filter((session) => {
         return session['id'] == req.cookies['session'];
       }).then((sessions) => {
@@ -21,10 +21,12 @@ module.exports = (server,module) => {
     }
   });
 
+  // Login
+  // Checks against the users table
   server.get('/auth/login', (req, res, next) => {
-    Users.run().filter((user) => {
+    Users.filter((user) => {
       return user['user'] == req.query.user && user['password'] == req.query.password
-    }).then((users) => {
+    }).run().then((users) => {
       if(users.length) {
         const newSession = new Session({ user: users[0].user });
         newSession.save().then((session) => {
@@ -39,7 +41,11 @@ module.exports = (server,module) => {
     });
   });
 
+  // Logout
   server.get('/auth/logout', (req, res, next) => {
+    if(req.session !== undefined && req.session['id'] !== undefined) {
+      Session.get(req.session['id']).run().delete();
+    }
     res.clearCookie('session',{ path:'/'});
     res.send('OK');
     next();
