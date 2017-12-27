@@ -1,0 +1,23 @@
+{
+  "name": "restify_thinky_rethinkdb",
+  "version": "0.0.0",
+  "description": "Restify, Thinky and RethinkDB example with cookies, ''auth'' and stuff",
+  "author": "Magnus Jonsson",
+  "license": "AGPL",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kmjonsson/restify_thinky_rethinkdb.git"
+  },
+  "dependencies": {
+    "restify": "^6.3.4",
+    "restify-cookies": "^0.2.2",
+    "rethinkdb": "^2.3.3",
+    "thinky": "^2.3.9"
+  },
+  "devDependencies": {
+    "nodemon": "^1.14.3"
+  },
+  "scripts": {
+    "dev": "nodemon -L server.js"
+  }
+}
