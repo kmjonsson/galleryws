@@ -1,4 +1,5 @@
 const Data = require('./data.js');
+const r = require('../../db.js').r;
 
 module.exports = (server,module) => {
   let base = '/api/' + module;
@@ -11,11 +12,27 @@ module.exports = (server,module) => {
 
   server.get(base + '/custom', (req, res, next) => {
     Data.run().filter((user) => {
-      return user['name'] == 'Ulrika'
+      return user['name'] == 'Ulrika '
     }).then((posts) => {
       res.send(posts);
     });
     next();
+  });
+
+  server.get(base + '/:id', (req, res, next) => {
+    Data.get(req.params.id)
+    .update({
+      views: r.row("views").add(1).default(0),
+      fluffy: r.row("fluffy").add(1).default(0)
+    })
+    .then((data) => {
+      res.send(data);
+      next();
+    });
+//    Data.get(req.params.id).then((data) => {
+//      res.send(data);
+//      next();
+//    });
   });
 
   server.post(base + '/create', (req, res, next) => {
@@ -27,7 +44,8 @@ module.exports = (server,module) => {
 
     newData.save().then((x) => {
       console.log(x['id']);
-      res.redirect(base, next);
+      res.send(x);
+      next();
     });
   });
 
