@@ -1,4 +1,4 @@
-const Data = require('../models/data.js');
+const Data = require('./data.js');
 
 module.exports = (server,module) => {
   let base = '/api/' + module;

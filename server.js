@@ -18,7 +18,7 @@ server.use(restify.plugins.queryParser());
 // named routes
 const routes = [];
 config.modules.forEach(module => {
-  routes.push(require(`${__dirname}/routes/` + module)(server,module));
+  routes.push(require(`${__dirname}/modules/` + module + `/routes`)(server,module));
 });
 
 // start server

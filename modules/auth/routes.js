@@ -1,5 +1,5 @@
-const Users = require('../models/users.js');
-const Session = require('../models/sessions.js');
+const Users = require('./users.js');
+const Session = require('./sessions.js');
 
 module.exports = (server,module) => {
   // Adds the session object to req object
