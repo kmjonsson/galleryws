@@ -1,19 +1,20 @@
 
-const CookieParser = require('restify-cookies');
-const restify = require('restify');
+const express = require('express');
 const config = require(`${__dirname}/config.js`);
+const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser')
 
 // Create restify server
-const server = restify.createServer({ name: config.server.name });
+const server = express();
 
 // Handle Cookies
-server.use(CookieParser.parse);
+server.use(cookieParser());
 
-// use restify's bodyParser (post)
-server.use(restify.plugins.bodyParser({ mapParams: true }));
+// parse application/x-www-form-urlencoded
+server.use(bodyParser.urlencoded({ extended: false }));
 
-// use restify's queryParser (get?foo=bar)
-server.use(restify.plugins.queryParser());
+// parse application/json
+server.use(bodyParser.json());
 
 // named routes
 const routes = [];

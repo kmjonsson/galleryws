@@ -9,6 +9,9 @@
     "url": "git+https://github.com/kmjonsson/restify_thinky_rethinkdb.git"
   },
   "dependencies": {
+    "body-parser": "^1.18.2",
+    "cookie-parser": "^1.4.3",
+    "express": "^4.16.2",
     "restify": "^6.3.4",
     "restify-cookies": "^0.2.2",
     "rethinkdb": "^2.3.3",

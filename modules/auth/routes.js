@@ -1,13 +1,14 @@
 const Users = require('./users.js');
 const Session = require('./sessions.js');
 
+const r = require('../../db.js').type;
+
 module.exports = (server,module) => {
   // Adds the session object to req object
   server.use((req, res, next) => {
     if(req.cookies['session'] !== undefined) {
-      Session.run().filter((session) => {
-        return session['id'] == req.cookies['session'];
-      }).then((sessions) => {
+      Session.filter({id: req.cookies['session']})
+      .run().then((sessions) => {
         if(sessions.length) {
           req.session = sessions[0];
         } else {
@@ -23,31 +24,27 @@ module.exports = (server,module) => {
 
   // Login
   // Checks against the users table
-  server.get('/auth/login', (req, res, next) => {
-    Users.filter((user) => {
-      return user['user'] == req.query.user && user['password'] == req.query.password
-    }).run().then((users) => {
+  server.get('/auth/login', (req, res) => {
+    Users.filter({ user: req.query.user, password: req.query.password })
+    .run().then((users) => {
       if(users.length) {
         const newSession = new Session({ user: users[0].user });
         newSession.save().then((session) => {
-          res.setCookie('session',session['id'],{path:'/'});
+          res.cookie('session',session['id'],{path:'/'});
           res.send(session['id']);
-          next();
         });
       } else {
         res.send("Failed :-(");
-        next();
       }
     });
   });
 
   // Logout
-  server.get('/auth/logout', (req, res, next) => {
+  server.get('/auth/logout', (req, res) => {
     if(req.session !== undefined && req.session['id'] !== undefined) {
-      Session.get(req.session['id']).run().delete();
+      Session.get(req.session['id']).delete().run();
     }
     res.clearCookie('session',{ path:'/'});
     res.send('OK');
-    next();
   });
 };
