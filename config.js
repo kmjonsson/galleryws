@@ -15,7 +15,7 @@ module.exports = {
   modules: [
     'auth', // Must be first, populates session
     'api',
-    'data',
+    'items',
     'image'
   ]
 };
